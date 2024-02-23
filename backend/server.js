@@ -81,10 +81,11 @@ const authMiddleware = (req, res, next) => {
 };
 
 
-app.get('/api/courses',authMiddleware , async (req, res) => {
+app.get('/api/courses', authMiddleware , async (req, res) => {
   try {
     // Extract user_id from the request; the actual implementation depends on your auth setup
-    const userId = req.user.user_id; // Assuming req.user contains the authenticated user's info
+    //const token = jwt.sign({ userId: user.user_id }, 'your_jwt_secret', { expiresIn: '1h' });
+    const userId = req.user.userId;
     const getCourses = (userId) => {
       return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM courses WHERE user_id = ?'; // SQL query with a placeholder for user_id

@@ -1,4 +1,3 @@
-// In Dashboard.jsx
 import React, { useState, useEffect } from 'react';
 
 const Dashboard = () => {
@@ -7,10 +6,20 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/courses');
+        // Retrieve the token from local storage
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+        
+        // Include the token in the Authorization header
+        const response = await fetch('http://localhost:3001/api/courses', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
         if (!response.ok) {
           throw new Error('Could not fetch courses');
         }
+
         const data = await response.json();
         setCourses(data);
       } catch (error) {

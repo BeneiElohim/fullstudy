@@ -22,17 +22,18 @@ const createUser = (user) => {
 };
 
 
-const getCourses = (userId) => {
-  return new Promise((resolve, reject) => {
-    const sql = 'SELECT * FROM courses WHERE user_id = ?'; // SQL query with a placeholder for user_id
-    db.all(sql, [userId], (err, rows) => { // Pass userId as the parameter to fill the placeholder
-      if (err) {
-        reject(err);
-      } else {
-        resolve(rows);
-      }
-    });
-  });
-};
+// const getCourses = (userId) => {
+//   return new Promise((resolve, reject) => {
+//     const sql = 'SELECT * FROM courses WHERE user_id = ?'; // SQL query with a placeholder for user_id
+//     db.all(sql, [userId], (err, rows) => { // Pass userId as the parameter to fill the placeholder
+//       if (err) {
+//         reject(err);
+//       } else {
+//         resolve(rows);
+//       }
+//     });
+//   });
+// };
 
-module.exports = { findUserByEmail, createUser, getCourses };
+module.exports = { findUserByEmail, createUser };
+// , getCourses
