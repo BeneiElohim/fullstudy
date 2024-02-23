@@ -25,10 +25,11 @@ export const AuthProvider = ({ children }) => {
 
   // Add a logout function in your AuthProvider or wherever appropriate
   const logout = () => {
+    console.log('Logging out...'); // Debugging line
     setAuthData(null);
     localStorage.removeItem('authData');
     sessionStorage.removeItem('authData');
-    // Redirect to login or perform other cleanup actions
+    window.location.href = '/login';
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
