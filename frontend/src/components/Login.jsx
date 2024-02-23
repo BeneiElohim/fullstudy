@@ -31,6 +31,7 @@ const Login = () => {
       if (keepSignedIn) {
         // Store auth data in localStorage for persistence across sessions
         localStorage.setItem('authData', JSON.stringify(data));
+        sessionStorage.setItem('authData', JSON.stringify(data));
       } else {
         // Store auth data in sessionStorage for the current session only
         sessionStorage.setItem('authData', JSON.stringify(data));
