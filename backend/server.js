@@ -104,6 +104,30 @@ app.get('/api/courses', authMiddleware , async (req, res) => {
     res.status(500).send('Server error');
   }
 })
+
+app.get('/api/assignments', authMiddleware , async (req, res) => {
+  try {
+    // Extract user_id from the request; the actual implementation depends on your auth setup
+    //const token = jwt.sign({ userId: user.user_id }, 'your_jwt_secret', { expiresIn: '1h' });
+    const userId = req.user.userId;
+    const getAssignments = (userId) => {
+      return new Promise((resolve, reject) => {
+        const sql = 'SELECT * FROM assignments WHERE user_id = ?'; // SQL query with a placeholder for user_id
+        db.all(sql, [userId], (err, rows) => { // Pass userId as the parameter to fill the placeholder
+          if (err) {
+            reject(err);
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+    };
+    const assignments = await getAssignments(userId);
+    res.json(assignments);
+  } catch (error) {
+    res.status(500).send('Server error');
+  }
+})
 //
 
 
