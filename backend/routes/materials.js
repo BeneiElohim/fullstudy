@@ -25,7 +25,6 @@ const upload = multer({ storage: storage, fileFilter: fileFilter, limits: { file
 
 router.get('/', (req, res) => {
     const studyMaterialsPromise = new Promise((resolve, reject) => {
-        // Query to get study materials along with their subject names for user_id = 1235
         const sql = 'SELECT study_materials.*, subjects.subject_name FROM study_materials JOIN subjects ON study_materials.subject_id = subjects.subject_id WHERE study_materials.user_id = 1235';
         global.db.all(sql, (err, rows) => {
             if (err) {
@@ -51,9 +50,9 @@ router.get('/', (req, res) => {
 
 router.post("/new-material", upload.single('file') , (req, res) => {
     const { title, material_type, subject_name, user_id, link_url, notes } = req.body;
-    const file_path = req.file ? req.file.path : null; // Assuming the file's field name is 'file'
+    const file_path = req.file ? req.file.path : null;
 
-    // First, find the subject_id corresponding to the given subject_name
+
     const findSubjectIdSql = "SELECT subject_id FROM subjects WHERE subject_name = ?";
     global.db.get(findSubjectIdSql, [subject_name], (subjectErr, subjectRow) => {
         if (subjectErr) {
@@ -68,7 +67,6 @@ router.post("/new-material", upload.single('file') , (req, res) => {
 
         const subject_id = subjectRow.subject_id;
 
-        // Now, insert the new material using the found subject_id
         const insertSql = "INSERT INTO study_materials (title, material_type, subject_id, user_id, file_path, link_url, notes) VALUES (?, ?, ?, ?, ?, ?, ?)";
         global.db.run(insertSql, [title, material_type, subject_id, user_id, file_path, link_url, notes], function(insertErr) {
             if (insertErr) {
@@ -86,7 +84,6 @@ router.post("/new-material", upload.single('file') , (req, res) => {
     });
 });
 
-//create an update route that will take the id of the material and update the title, material_type, subject_id, file_path, link_url, and notes
 router.put("/update-material/:id", (req, res) => {
     const { title, material_type, subject, file_path, link_url, notes } = req.body;
     const sql = "UPDATE study_materials SET title = ?, material_type = ?, subject_id = ?, file_path = ?, link_url = ?, notes = ? WHERE material_id = ?";

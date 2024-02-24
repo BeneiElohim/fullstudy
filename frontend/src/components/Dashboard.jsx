@@ -12,9 +12,8 @@ const Dashboard = () => {
   const coursesUrl = 'http://localhost:3001/courses';
 
   useEffect(() => {
-    // Assuming fetchContent is a function that fetches data and sets it using setState
     fetchContent('assignments', setAssignments, assignementsUrl, setIsLoading );
-    fetchContent('courses', setCourses, coursesUrl, setIsLoading); // Fetch courses
+    fetchContent('courses', setCourses, coursesUrl, setIsLoading); 
   }, []);
 
   let today = new Date();

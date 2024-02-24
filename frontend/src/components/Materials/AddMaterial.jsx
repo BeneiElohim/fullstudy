@@ -9,8 +9,8 @@ function AddMaterial({ subjects }) {
   const [title, setTitle] = useState('');
   const [link_url, setLink_Url] = useState('');
   const [notes, setNotes] = useState('');
-  const [file, setFile] = useState(null); // State to hold the selected file
-  const [selectedOption, setSelectedOption] = useState(''); // State to manage selected option
+  const [file, setFile] = useState(null); 
+  const [selectedOption, setSelectedOption] = useState(''); 
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -24,7 +24,7 @@ function AddMaterial({ subjects }) {
   };
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]); // Update the state with the selected file
+    setFile(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -37,7 +37,6 @@ function AddMaterial({ subjects }) {
     formData.append('title', title);
     formData.append('link_url', link_url);
     formData.append('notes', notes);
-    formData.append('user_id', '1235'); // Assuming a fixed user_id for now
     if (file) formData.append('file', file);
 
     try {
