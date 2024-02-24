@@ -30,7 +30,7 @@ global.db = new sqlite3.Database('./database.db', function (err) {
 });
 
 
-app.post('/api/register', async (req, res) => {
+app.post('/register', async (req, res) => {
   const { full_name, email, password } = req.body;
 
   try {
@@ -53,7 +53,7 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-app.post('/api/login', async (req, res) => {
+app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -83,7 +83,7 @@ const authMiddleware = (req, res, next) => {
 };
 
 ///////COURSES ////////////////////////
-app.get('/api/courses', authMiddleware , async (req, res) => {
+app.get('/courses', authMiddleware , async (req, res) => {
   try {
     // Extract user_id from the request; the actual implementation depends on your auth setup
     //const token = jwt.sign({ userId: user.user_id }, 'your_jwt_secret', { expiresIn: '1h' });
@@ -109,7 +109,7 @@ app.get('/api/courses', authMiddleware , async (req, res) => {
 
 
 ///////COURSES ////////////////////////
-app.get('/api/assignments', authMiddleware , async (req, res) => {
+app.get('/assignments', authMiddleware , async (req, res) => {
   try {
     // Extract user_id from the request; the actual implementation depends on your auth setup
     //const token = jwt.sign({ userId: user.user_id }, 'your_jwt_secret', { expiresIn: '1h' });
@@ -155,7 +155,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage: storage, fileFilter: fileFilter, limits: { fileSize: 5 * 1024 * 1024 } }); // Limit file size to 5MB
 
-app.get('/api/materials', authMiddleware, async (req, res) => {
+app.get('/materials', authMiddleware, async (req, res) => {
   try{
     const userId = req.user.userId;
     const getMaterials = (userId) => {
@@ -180,8 +180,9 @@ app.get('/api/materials', authMiddleware, async (req, res) => {
 
 
 app.post("/materials/new-material", authMiddleware, upload.single('file') , (req, res) => {
-  const { title, material_type, subject_name, user_id, link_url, notes } = req.body;
+  const { title, material_type, subject_name, link_url, notes } = req.body;
   const file_path = req.file ? req.file.path : null; // Assuming the file's field name is 'file'
+  const userId = req.user.userId;
 
   // First, find the subject_id corresponding to the given subject_name
   const findSubjectIdSql = "SELECT subject_id FROM subjects WHERE subject_name = ?";
@@ -200,7 +201,7 @@ app.post("/materials/new-material", authMiddleware, upload.single('file') , (req
 
       // Now, insert the new material using the found subject_id
       const insertSql = "INSERT INTO study_materials (title, material_type, subject_id, user_id, file_path, link_url, notes) VALUES (?, ?, ?, ?, ?, ?, ?)";
-      global.db.run(insertSql, [title, material_type, subject_id, user_id, file_path, link_url, notes], function(insertErr) {
+      global.db.run(insertSql, [title, material_type, subject_id, userId, file_path, link_url, notes], function(insertErr) {
           if (insertErr) {
               res.status(400).json({ "error": insertErr.message });
               return;
@@ -216,33 +217,77 @@ app.post("/materials/new-material", authMiddleware, upload.single('file') , (req
   });
 });
 
-//create an update route that will take the id of the material and update the title, material_type, subject_id, file_path, link_url, and notes
-app.put("/materials/update-material/:id", authMiddleware, (req, res) => {
-  const { title, material_type, subject, file_path, link_url, notes } = req.body;
-  const sql = "UPDATE study_materials SET title = ?, material_type = ?, subject_id = ?, file_path = ?, link_url = ?, notes = ? WHERE material_id = ?";
-  global.db.run(sql, [title, material_type, subject, file_path, link_url, notes, req.params.id], function(err) {
+app.put("/materials/update-material/:id", authMiddleware, upload.single('file'), (req, res) => {
+  const { title, material_type, subject_name, link_url, notes } = req.body;
+  let file_path = req.file ? req.file.path : null;
+
+  // First, find the subject_id corresponding to the given subject_name
+  const findSubjectIdSql = "SELECT subject_id FROM subjects WHERE subject_name = ?";
+  global.db.get(findSubjectIdSql, [subject_name], (subjectErr, subjectRow) => {
+      if (subjectErr) {
+          res.status(400).json({ "error": subjectErr.message });
+          return;
+      }
+
+      if (!subjectRow) {
+          res.status(404).json({ "error": "Subject not found" });
+          return;
+      }
+
+      const subject_id = subjectRow.subject_id;
+
+      // Determine the current file path if no new file is uploaded
+      if (!file_path) {
+          const getExistingFilePathSql = "SELECT file_path FROM study_materials WHERE material_id = ?";
+          global.db.get(getExistingFilePathSql, [req.params.id], (err, row) => {
+              if (err) {
+                  res.status(400).json({ "error": err.message });
+                  return;
+              }
+              file_path = row ? row.file_path : null;
+
+              // Execute the update with the existing or new file path
+              executeUpdate(title, material_type, subject_id, file_path, link_url, notes, req.params.id, res);
+          });
+      } else {
+          // New file uploaded, proceed with the update
+          executeUpdate(title, material_type, subject_id, file_path, link_url, notes, req.params.id, res);
+      }
+  });
+});
+
+function executeUpdate(title, material_type, subject_id, file_path, link_url, notes, material_id, res) {
+  const updateSql = "UPDATE study_materials SET title = ?, material_type = ?, subject_id = ?, file_path = ?, link_url = ?, notes = ? WHERE material_id = ?";
+  global.db.run(updateSql, [title, material_type, subject_id, file_path, link_url, notes, material_id], function(err) {
       if (err) {
-          res.status(400).json({ "error": res.message });
+          res.status(400).json({ "error": err.message });
           return;
       }
       res.json({
           message: "success",
           data: {
-              id: this.lastID
+              id: material_id // Using material_id since lastID is not relevant for UPDATE operation
           }
       });
   });
-});
+}
 
 
 app.delete("/materials/delete-material/:id", authMiddleware, (req, res) => {
-  const sql = "DELETE FROM study_materials WHERE material_id = ?";
-  global.db.run(sql, req.params.id, function(err) {
+  const userId = req.user.userId; // Get user ID from the authenticated user
+  const materialId = req.params.id; // Get material ID from the URL parameter
+
+  const deleteSql = "DELETE FROM study_materials WHERE material_id = ? AND user_id = ?";
+  global.db.run(deleteSql, [materialId, userId], function(err) {
       if (err) {
-          res.status(400).json({ "error": res.message });
+          res.status(400).json({ "error": err.message }); // Corrected to err.message for consistency
           return;
       }
-      res.json({ message: "deleted", changes: this.changes });
+      if (this.changes > 0) {
+        res.json({ message: "deleted", changes: this.changes });
+      } else {
+        res.status(404).json({ message: "No material found with the given ID for this user" });
+      }
   });
 });
 

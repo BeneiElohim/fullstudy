@@ -1,4 +1,5 @@
-const fetchContent = async (content, setContent, url) => {
+const fetchContent = async (content, setContent, url, setIsLoading) => {
+    if (setIsLoading) setIsLoading(true);
     try {
         // Retrieve the authData from sessionStorage and parse it to get the token
         const authData = JSON.parse(sessionStorage.getItem('authData'));
@@ -29,6 +30,8 @@ const fetchContent = async (content, setContent, url) => {
         setContent(data);
     } catch (error) {
         console.error(`Error fetching ${content}:`, error);
+    } finally {
+        if (setIsLoading) setIsLoading(false);
     }
 }
 

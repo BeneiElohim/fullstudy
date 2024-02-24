@@ -1,4 +1,4 @@
-
+//frontend/src/App.jsx
 import React from 'react';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Login from './components/Login';
@@ -7,7 +7,8 @@ import { useAuth} from './context/AuthContext.jsx';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar/Navbar.jsx';
-
+import { ChakraProvider, Flex } from '@chakra-ui/react';
+import Materials from './components/Materials/Materials.jsx'; 
 
 
 const App = () => {
@@ -21,21 +22,32 @@ const App = () => {
   };
 
   return (
-        <Routes>
-          <Route path="/login" element={!authData ? <Login onLoginSuccess={onLoginSuccess}/> : <Navigate to="/dashboard" replace />} />
-          <Route path="/register" element={!authData ? <Register /> : <Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <div style={{ display: 'flex' }}>
-                <Navbar />
-                <div style={{ marginLeft: '200px' }}> {/* Adjust this value based on the width of your navbar */}
-                  <Dashboard />
-                </div>
+    <ChakraProvider>
+      <Routes>
+        <Route path="/login" element={!authData ? <Login onLoginSuccess={onLoginSuccess}/> : <Navigate to="/dashboard" replace />} />
+        <Route path="/register" element={!authData ? <Register /> : <Navigate to="/dashboard" replace />} />
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <div style={{ display: 'flex' }}>
+              <Navbar />
+              <div style={{ marginLeft: '200px' }}> {/* Adjust this value based on the width of your navbar */}
+                <Dashboard />
               </div>
-            </ProtectedRoute>
-          } />
-          {/* Other routes */}
-        </Routes>
+            </div>
+          </ProtectedRoute>
+        } />
+        <Route path="/materials" element={
+          <ProtectedRoute>
+            <div style={{ display: 'flex' }}>
+              <Navbar />
+              <div style={{ marginLeft: '200px' }}> {/* Adjust if necessary */}
+                <Materials />
+              </div>
+            </div>
+          </ProtectedRoute>
+        } />
+      </Routes>
+    </ChakraProvider>
   );
 };
 
