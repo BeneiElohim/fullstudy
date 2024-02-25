@@ -295,6 +295,26 @@ app.get("/subjects", authMiddleware, (req, res) => {
   });
 });
 
+app.post("/subjects/new-subject", upload.none(), authMiddleware, (req, res) => {
+  const subject_name  = req.body.subject_name;
+  const userId = req.user.userId;
+
+  const insertSql = "INSERT INTO subjects (subject_name, user_id) VALUES (?, ?)";
+  global.db.run(insertSql, [subject_name, userId], function(err) {
+      if (err) {
+          res.status(400).json({ "error": err.message });
+          return;
+      }
+      res.json({
+          message: "success",
+          data: {
+              id: this.lastID
+          }
+      });
+  });
+}
+);
+
 
 
 app.listen(PORT, () => {

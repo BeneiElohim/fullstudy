@@ -9,7 +9,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar/Navbar.jsx';
 import { ChakraProvider, Flex } from '@chakra-ui/react';
 import Materials from './components/Materials/Materials.jsx'; 
-import Subjects from './components/Subjects/Subjects.jsx';
 
 
 const App = () => {
@@ -42,16 +41,6 @@ const App = () => {
               <Navbar />
               <div style={{ marginLeft: '200px' }}>
                 <Materials />
-              </div>
-            </div>
-          </ProtectedRoute>
-        } />
-        <Route path="/subjects" element={
-          <ProtectedRoute>
-            <div style={{ display: 'flex' }}>
-              <Navbar />
-              <div style={{ marginLeft: '200px' }}>
-                <Subjects />
               </div>
             </div>
           </ProtectedRoute>

@@ -2,18 +2,23 @@ import React, { useState, useEffect } from 'react';
 import SubjectCard from './Subjects/SubjectCard';
 import AssignmentCard from './Assignments/AssignmentCard';
 import fetchContent from '../context/fetchContent';
-import { Box, Text, HStack } from '@chakra-ui/react';
+import { Box, Text, HStack , Heading} from '@chakra-ui/react';
+import AddSubject from './Subjects/AddSubject';
 
 const Dashboard = () => {
   const [assignments, setAssignments] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const assignementsUrl = 'http://localhost:3001/assignments';
-  const subjectsUrls = 'http://localhost:3001/subjects';
+  const subjectsUrl = 'http://localhost:3001/subjects';
+
+  const fetchSubjects = () => {
+    fetchContent('subjects', setSubjects, subjectsUrl, setIsLoading);
+  };
 
   useEffect(() => {
     fetchContent('assignments', setAssignments, assignementsUrl, setIsLoading );
-    fetchContent('subjects', setSubjects, subjectsUrls, setIsLoading); 
+    fetchSubjects();
   }, []);
 
   let today = new Date();
@@ -24,11 +29,11 @@ const Dashboard = () => {
 
   return (
     <Box padding={4} >
-      <Text fontSize="2xl" mb={4}>My Dashboard</Text>
+      <Heading as="h1" size="xl" pb={10}>My Dashboard</Heading>
       <Text align="center" fontSize="xl" mb={4}>Today's Date: {today.toLocaleDateString()}</Text>
       <HStack gap={10} align="flex-start">
         <Box>
-          <Text fontSize="xl" mb={4}>Subjects</Text>
+          <Text fontSize="xl" mb={4}>Subjects <AddSubject/></Text>
           {subjects.map(subject => <SubjectCard key={subject.subject_id} subject={subject} />)}
         </Box>
         <Box>
