@@ -56,10 +56,10 @@ const Materials = () => {
             <Heading as="h2" size="md">Material</Heading>
             <HStack align={'flex-start'}>
               {['Text', 'Document', 'Link', 'Image'].map((type, typeIndex) => (
-                <VStack key={typeIndex} align="stretch" spacing={2} pr={20}>
+                <VStack key={typeIndex} align="stretch" spacing={2} pr={5}>
                   <Heading as="h3" size="sm">{type}</Heading>
                   {studyMaterials.filter(material => material.material_type === type && material.subject_name === selectedClass).map((material, materialIndex) => (
-                    <Text key={materialIndex}>{material.title}</Text>
+                    <Button key={materialIndex}>{material.title}</Button>
                   ))}
                 </VStack>
               ))}
