@@ -1,6 +1,7 @@
 // In your Login component
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext'; // Adjust the path as necessary
+import { FormErrorMessage, FormLabel, Center, Box, Heading, Input, Button, HStack } from '@chakra-ui/react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -44,41 +45,58 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div>
-          <input
-            type="checkbox"
-            id="keepSignedIn"
-            checked={keepSignedIn}
-            onChange={(e) => setKeepSignedIn(e.target.checked)}
-          />
-          <label htmlFor="keepSignedIn">Keep me signed in</label>
-        </div>
-        <button type="submit">Login</button>
-        {error && <div>{error}</div>}
-      </form>
-    </div>
+<>
+<Center w="100%" h="100vh">
+  <Box mx="1" maxW="xl" p="9" borderWidth="1px" borderRadius="lg">
+    <Heading mb="4" size="lg" textAlign="center">
+      Log In
+    </Heading>
+    <form onSubmit={handleSubmit}>
+      <FormLabel htmlFor="email">Email</FormLabel>
+      <Input
+        type="email"
+        id="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="user@email.com"
+      />
+      <FormLabel htmlFor="password">Password</FormLabel>
+      <Input
+        type="password"
+        id="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="password"
+      />
+      <HStack mt="4">
+        <input
+          type="checkbox"
+          id="keepSignedIn"
+          checked={keepSignedIn}
+          onChange={(e) => setKeepSignedIn(e.target.checked)}
+        />
+        <FormLabel htmlFor="keepSignedIn">Keep me signed in</FormLabel>
+      </HStack>
+      <Button
+        mt="4"
+        type="submit"
+        colorScheme="blue"
+        size="md"
+        w="full"
+        loadingText="Logging In"
+      >
+        Log In
+      </Button>
+      <FormErrorMessage>
+      {error && <div>{error}</div>}
+      </FormErrorMessage>
+    </form>
+  </Box>
+</Center>
+</>
   );
 };
 
 export default Login;
+
+
