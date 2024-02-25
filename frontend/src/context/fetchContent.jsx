@@ -6,24 +6,22 @@ const fetchContent = async (content, setContent, url, setIsLoading) => {
         const token = authData ? authData.token : null;
         console.log('Token from sessionStorage:', token); // Debug: Log the token to ensure it's being retrieved
     
-        // Check if the token is null and handle the case appropriately
         if (!token) {
         console.error('No token found in sessionStorage');
-        // You can redirect to login page or show an error message here
         return;
         }
     
         // Include the token in the Authorization header
         const response = await fetch(url, {
-        method: 'GET', // Explicitly specify the method
+        method: 'GET',
         headers: {
-            'Content-Type': 'application/json', // Ensure you're setting the content type
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
         });
     
         if (!response.ok) {
-        throw new Error(`Could not fetch ${content}, status: ${response.status}`); // Include the status code in the error message for more context
+        throw new Error(`Could not fetch ${content}, status: ${response.status}`);
         }
     
         const data = await response.json();

@@ -18,19 +18,19 @@ export const AuthProvider = ({ children }) => {
 
   const value = { authData, setAuthData };
 
-  const login = (data) => {
-    setAuthData(data);
+  // const login = (data) => {
+  //   setAuthData(data);
     
-  };
+  // };
 
-  // Add a logout function in your AuthProvider or wherever appropriate
-  const logout = () => {
-    console.log('Logging out...'); // Debugging line
-    setAuthData(null);
-    localStorage.removeItem('authData');
-    sessionStorage.removeItem('authData');
-    window.location.href = '/login';
-  };
+  // // Add a logout function in your AuthProvider or wherever appropriate
+  // const logout = () => {
+  //   console.log('Logging out...'); // Debugging line
+  //   setAuthData(null);
+  //   localStorage.removeItem('authData');
+  //   sessionStorage.removeItem('authData');
+  //   window.location.href = '/login';
+  // };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

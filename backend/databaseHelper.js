@@ -36,4 +36,3 @@ const getCourses = (userId) => {
 };
 
 module.exports = { findUserByEmail, createUser };
-// , getCourses

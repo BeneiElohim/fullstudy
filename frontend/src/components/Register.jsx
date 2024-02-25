@@ -28,7 +28,7 @@ const Register = () => {
       }
 
       const data = await response.json();
-      setAuthData(data); // Set auth data in context, assuming registration API returns auth data
+      setAuthData(data);
 
       // Redirect to dashboard after successful registration
       navigate('/dashboard');

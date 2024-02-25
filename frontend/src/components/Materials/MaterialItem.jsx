@@ -5,9 +5,6 @@ import { Button, Link, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHe
 const MaterialItem = ({ material }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleEdit = () => {
-    onEdit(material); // Trigger the edit mode with the current material data
-  };
 
   switch (material.material_type) {
     case 'Link':

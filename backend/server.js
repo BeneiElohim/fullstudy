@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-const path = require('path'); // Add this line
+const path = require('path');
 
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -73,9 +73,9 @@ app.post('/login', async (req, res) => {
 ////////////MIDDLEWARE/////////////////////
 const authMiddleware = (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(' ')[1]; // Assuming the token is sent in the Authorization header
-    const decoded = jwt.verify(token, 'your_jwt_secret'); // Replace 'YOUR_SECRET_KEY' with your actual secret key
-    req.user = decoded; // Add the decoded token payload to the request object
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, 'your_jwt_secret'); 
+    req.user = decoded;
     next();
   } catch (error) {
     res.status(401).send(error.message);
@@ -83,15 +83,14 @@ const authMiddleware = (req, res, next) => {
 };
 
 ///////COURSES ////////////////////////
-app.get('/courses', authMiddleware , async (req, res) => {
+app.get('/subjects', authMiddleware , async (req, res) => {
   try {
-    // Extract user_id from the request; the actual implementation depends on your auth setup
-    //const token = jwt.sign({ userId: user.user_id }, 'your_jwt_secret', { expiresIn: '1h' });
+
     const userId = req.user.userId;
-    const getCourses = (userId) => {
+    const getSubjects = (userId) => {
       return new Promise((resolve, reject) => {
-        const sql = 'SELECT * FROM courses WHERE user_id = ?'; // SQL query with a placeholder for user_id
-        db.all(sql, [userId], (err, rows) => { // Pass userId as the parameter to fill the placeholder
+        const sql = 'SELECT * FROM subjects WHERE user_id = ?'; 
+        db.all(sql, [userId], (err, rows) => { 
           if (err) {
             reject(err);
           } else {
@@ -100,7 +99,7 @@ app.get('/courses', authMiddleware , async (req, res) => {
         });
       });
     };
-    const courses = await getCourses(userId);
+    const courses = await getSubjects(userId);
     res.json(courses);
   } catch (error) {
     res.status(500).send('Server error');
@@ -111,13 +110,12 @@ app.get('/courses', authMiddleware , async (req, res) => {
 ///////COURSES ////////////////////////
 app.get('/assignments', authMiddleware , async (req, res) => {
   try {
-    // Extract user_id from the request; the actual implementation depends on your auth setup
-    //const token = jwt.sign({ userId: user.user_id }, 'your_jwt_secret', { expiresIn: '1h' });
+
     const userId = req.user.userId;
     const getAssignments = (userId) => {
       return new Promise((resolve, reject) => {
-        const sql = 'SELECT * FROM assignments WHERE user_id = ?'; // SQL query with a placeholder for user_id
-        db.all(sql, [userId], (err, rows) => { // Pass userId as the parameter to fill the placeholder
+        const sql = 'SELECT * FROM assignments WHERE user_id = ?';
+        db.all(sql, [userId], (err, rows) => { 
           if (err) {
             reject(err);
           } else {
@@ -160,9 +158,8 @@ app.get('/materials', authMiddleware, async (req, res) => {
     const userId = req.user.userId;
     const getMaterials = (userId) => {
       return new Promise((resolve, reject) => {
-        // Query to get study materials along with their subject names for user_id = 1235
         const sql = 'SELECT study_materials.*, subjects.subject_name FROM study_materials JOIN subjects ON study_materials.subject_id = subjects.subject_id WHERE study_materials.user_id = ?';
-        db.all(sql, [userId], (err, rows) => { // Pass userId as the parameter to fill the placeholder
+        db.all(sql, [userId], (err, rows) => {
           if (err) {
             reject(err);
           } else {
@@ -181,10 +178,9 @@ app.get('/materials', authMiddleware, async (req, res) => {
 
 app.post("/materials/new-material", authMiddleware, upload.single('file') , (req, res) => {
   const { title, material_type, subject_name, link_url, notes } = req.body;
-  const file_path = req.file ? req.file.path : null; // Assuming the file's field name is 'file'
+  const file_path = req.file ? req.file.path : null; 
   const userId = req.user.userId;
 
-  // First, find the subject_id corresponding to the given subject_name
   const findSubjectIdSql = "SELECT subject_id FROM subjects WHERE subject_name = ?";
   global.db.get(findSubjectIdSql, [subject_name], (subjectErr, subjectRow) => {
       if (subjectErr) {
@@ -199,7 +195,6 @@ app.post("/materials/new-material", authMiddleware, upload.single('file') , (req
 
       const subject_id = subjectRow.subject_id;
 
-      // Now, insert the new material using the found subject_id
       const insertSql = "INSERT INTO study_materials (title, material_type, subject_id, user_id, file_path, link_url, notes) VALUES (?, ?, ?, ?, ?, ?, ?)";
       global.db.run(insertSql, [title, material_type, subject_id, userId, file_path, link_url, notes], function(insertErr) {
           if (insertErr) {
@@ -221,7 +216,6 @@ app.put("/materials/update-material/:id", authMiddleware, upload.single('file'),
   const { title, material_type, subject_name, link_url, notes } = req.body;
   let file_path = req.file ? req.file.path : null;
 
-  // First, find the subject_id corresponding to the given subject_name
   const findSubjectIdSql = "SELECT subject_id FROM subjects WHERE subject_name = ?";
   global.db.get(findSubjectIdSql, [subject_name], (subjectErr, subjectRow) => {
       if (subjectErr) {
@@ -236,7 +230,6 @@ app.put("/materials/update-material/:id", authMiddleware, upload.single('file'),
 
       const subject_id = subjectRow.subject_id;
 
-      // Determine the current file path if no new file is uploaded
       if (!file_path) {
           const getExistingFilePathSql = "SELECT file_path FROM study_materials WHERE material_id = ?";
           global.db.get(getExistingFilePathSql, [req.params.id], (err, row) => {
@@ -246,11 +239,9 @@ app.put("/materials/update-material/:id", authMiddleware, upload.single('file'),
               }
               file_path = row ? row.file_path : null;
 
-              // Execute the update with the existing or new file path
               executeUpdate(title, material_type, subject_id, file_path, link_url, notes, req.params.id, res);
           });
       } else {
-          // New file uploaded, proceed with the update
           executeUpdate(title, material_type, subject_id, file_path, link_url, notes, req.params.id, res);
       }
   });
@@ -266,7 +257,7 @@ function executeUpdate(title, material_type, subject_id, file_path, link_url, no
       res.json({
           message: "success",
           data: {
-              id: material_id // Using material_id since lastID is not relevant for UPDATE operation
+              id: material_id
           }
       });
   });
@@ -274,13 +265,13 @@ function executeUpdate(title, material_type, subject_id, file_path, link_url, no
 
 
 app.delete("/materials/delete-material/:id", authMiddleware, (req, res) => {
-  const userId = req.user.userId; // Get user ID from the authenticated user
-  const materialId = req.params.id; // Get material ID from the URL parameter
+  const userId = req.user.userId;
+  const materialId = req.params.id;
 
   const deleteSql = "DELETE FROM study_materials WHERE material_id = ? AND user_id = ?";
   global.db.run(deleteSql, [materialId, userId], function(err) {
       if (err) {
-          res.status(400).json({ "error": err.message }); // Corrected to err.message for consistency
+          res.status(400).json({ "error": err.message });
           return;
       }
       if (this.changes > 0) {
@@ -293,7 +284,7 @@ app.delete("/materials/delete-material/:id", authMiddleware, (req, res) => {
 
 ////////////////////SUBJECTS//////////////////////
 app.get("/subjects", authMiddleware, (req, res) => {
-  const userId = req.user.userId; // Get user ID from the authenticated user
+  const userId = req.user.userId;
   const getSubjectsSql = "SELECT * FROM subjects WHERE user_id = ?";
   global.db.all(getSubjectsSql, [userId], (err, rows) => {
       if (err) {

@@ -1,6 +1,6 @@
 // In your Login component
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext'; // Adjust the path as necessary
+import { useAuth } from '../context/AuthContext';
 import { FormErrorMessage, FormLabel, Center, Box, Heading, Input, Button, HStack } from '@chakra-ui/react';
 
 const Login = () => {
@@ -8,7 +8,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [keepSignedIn, setKeepSignedIn] = useState(false);
   const [error, setError] = useState('');
-  const { setAuthData } = useAuth(); // Assuming useAuth provides setAuthData
+  const { setAuthData } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();

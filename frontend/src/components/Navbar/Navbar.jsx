@@ -23,7 +23,7 @@ const Navbar = () => {
       <VStack spacing={4}>
         <Text fontSize="2xl">StudyTracker</Text>
         <Link to="/dashboard"><Button variant="ghost" _hover={{ color: 'blue.300' }}><MdDashboard size={50} />Dashboard</Button></Link>
-        <Link to="/materials"><Button variant="ghost" _hover={{ color: 'blue.300' }}><ImBooks size={50} />Subjects</Button></Link>
+        <Link to="/subjects"><Button variant="ghost" _hover={{ color: 'blue.300' }}><TbMathSymbols size={50} />Subjects</Button></Link>
         <Link to="/materials"><Button variant="ghost" _hover={{ color: 'blue.300' }}><ImBooks size={50} />Materials</Button></Link>
 
         <Button style={{ position: "fixed", bottom: "100px", left: "50px" }} variant="ghost" _hover={{ color: 'blue.300' }}><IoSettingsSharp size={30} /></Button>
