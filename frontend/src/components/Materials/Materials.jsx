@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { VStack, HStack, Heading, Button, Text } from '@chakra-ui/react'; // Assuming you're using Chakra UI
+import { 
+  VStack, 
+  HStack, 
+  Heading, 
+  Button, 
+  Text, 
+  Link, 
+  Modal, 
+  ModalOverlay, 
+  ModalContent, 
+  ModalHeader, 
+  ModalCloseButton, 
+  ModalBody, 
+  useDisclosure } from '@chakra-ui/react';
 import AddMaterial from './AddMaterial'; // Assuming AddMaterial is a component you've defined
 import fetchContent from '../../context/fetchContent';
 
