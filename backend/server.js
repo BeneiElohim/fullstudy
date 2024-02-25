@@ -291,8 +291,18 @@ app.delete("/materials/delete-material/:id", authMiddleware, (req, res) => {
   });
 });
 
-
-
+////////////////////SUBJECTS//////////////////////
+app.get("/subjects", authMiddleware, (req, res) => {
+  const userId = req.user.userId; // Get user ID from the authenticated user
+  const getSubjectsSql = "SELECT * FROM subjects WHERE user_id = ?";
+  global.db.all(getSubjectsSql, [userId], (err, rows) => {
+      if (err) {
+          res.status(400).json({ "error": err.message });
+          return;
+      }
+      res.json(rows);
+  });
+});
 
 
 

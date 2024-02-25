@@ -13,11 +13,14 @@ const Materials = () => {
   const [selectedClass, setSelectedClass] = useState(null);
   const [studyMaterials, setStudyMaterials] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [subjects, setSubjects] = useState([]);
 
-  const url = "http://localhost:3001/materials"
+  const materialsUrl = "http://localhost:3001/materials"
+  const subjectsUrl = "http://localhost:3001/subjects"
 
   const fetchMaterials = () => {
-    fetchContent('studyMaterials', setStudyMaterials, url, setIsLoading);
+    fetchContent('studyMaterials', setStudyMaterials, materialsUrl, setIsLoading);
+    fetchContent('subjects', setSubjects, subjectsUrl, setIsLoading);
   };
 
   useEffect(() => {
@@ -25,13 +28,6 @@ const Materials = () => {
   }, []);
   
 
-  // Extract unique subjects
-  const subjects = Array.from(new Set(studyMaterials.map(item => item.subject_name))).map(subject_name => {
-    return {
-      subject_name,
-      subject_id: studyMaterials.find(item => item.subject_name === subject_name).subject_id
-    };
-  });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -43,7 +39,7 @@ const Materials = () => {
       <VStack align="flex-start" spacing={8}>
 
         {/* Courses Column */}
-        <Heading as="h2" size="lg" >Courses</Heading>
+        <Heading as="h2" size="lg" >Subjects</Heading>
         <HStack align="stretch" spacing={4} minWidth="150px">
           {subjects.map((subject, index) => (
             <Button
@@ -57,7 +53,7 @@ const Materials = () => {
         </HStack>
 
         {/* Types Column */}
-        {selectedClass && (
+        {(selectedClass) && (
           <VStack align="flex-start" spacing={8}>
             <Heading as="h2" size="lg">Material</Heading>
             <HStack align={'flex-start'}>

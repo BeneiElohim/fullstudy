@@ -1,7 +1,6 @@
 // MaterialItem.jsx
 import React from 'react';
-import { Button, Link, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, IconButton } from '@chakra-ui/react';
-import { EditIcon } from '@chakra-ui/icons';
+import { Button, Link, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody } from '@chakra-ui/react';
 
 const MaterialItem = ({ material }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -17,7 +16,6 @@ const MaterialItem = ({ material }) => {
         return <Button><a href={`http://localhost:3001/${material.file_path}`} target="_blank" rel="noopener noreferrer">{material.title}</a></Button>
     case 'Text':
       return (
-        
         <Button onClick={onOpen}>{material.title}
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />

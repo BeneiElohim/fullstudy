@@ -28,7 +28,7 @@ const Dashboard = () => {
       <Text align="center" fontSize="xl" mb={4}>Today's Date: {today.toLocaleDateString()}</Text>
       <HStack gap={10} align="flex-start">
         <Box>
-          <Text fontSize="xl" mb={4}>Courses</Text>
+          <Text fontSize="xl" mb={4}>Subjects</Text>
           {courses.map(course => <CourseCard key={course.course_id} course={course} />)}
         </Box>
         <Box>
