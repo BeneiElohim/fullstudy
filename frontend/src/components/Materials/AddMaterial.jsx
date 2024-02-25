@@ -2,7 +2,7 @@ import { Button, useDisclosure, Select, Modal, ModalOverlay, ModalContent, Modal
 import React, { useState } from 'react';
 import { AddIcon } from '@chakra-ui/icons';
 
-function AddMaterial({ subjects }) {
+function AddMaterial({ subjects, ...props }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [subject, setSubject] = useState('');
   const [material_type, setMaterial_Type] = useState('');
@@ -38,17 +38,20 @@ function AddMaterial({ subjects }) {
     formData.append('link_url', link_url);
     formData.append('notes', notes);
     if (file) formData.append('file', file);
+    const authData = JSON.parse(sessionStorage.getItem('authData'));
+    const token = authData ? authData.token : null;
 
     try {
       const response = await fetch('http://localhost:3001/materials/new-material', {
         method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
         body: formData, // Sending the form data instead of JSON
       });
 
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
-
+      props.onMaterialsUpdated(); // Update the materials list
       onClose(); // Close the modal on success
     } catch (error) {
       console.error('Error:', error);

@@ -10,8 +10,12 @@ const Materials = () => {
 
   const url = "http://localhost:3001/materials"
 
-  useEffect(() => {
+  const fetchMaterials = () => {
     fetchContent('studyMaterials', setStudyMaterials, url, setIsLoading);
+  };
+
+  useEffect(() => {
+    fetchMaterials();
   }, []);
   
 
@@ -29,7 +33,7 @@ const Materials = () => {
 
   return (
     <VStack align="stretch" spacing={8} padding={8}>
-      <Heading as="h1" size="xl">Study Materials <AddMaterial subjects={subjects} /></Heading>
+      <Heading as="h1" size="xl">Study Materials <AddMaterial subjects={subjects} onMaterialsUpdated={fetchMaterials} /></Heading>
       <VStack align="flex-start" spacing={8}>
 
         {/* Courses Column */}
