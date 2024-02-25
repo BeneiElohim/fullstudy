@@ -19,7 +19,7 @@ const Navbar = () => {
   return (
     <Box position="fixed" height="100vh" bg="blue.500" color="white" padding={4}>
       <VStack spacing={4} align="stretch">
-        <Text fontSize="2xl">StudyApp</Text>
+        <Text fontSize="2xl">StudyTracker</Text>
         <Link to="/dashboard"><Button variant="ghost" _hover={{ color: 'blue.300' }}><MdDashboard size={50} />Dashboard</Button></Link>
         <Link to="/materials"><Button variant="ghost" _hover={{ color: 'blue.300' }}><ImBooks size={50} />Materials</Button></Link>
 

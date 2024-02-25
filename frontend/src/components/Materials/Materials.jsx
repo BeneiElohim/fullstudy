@@ -3,18 +3,11 @@ import {
   VStack, 
   HStack, 
   Heading, 
-  Button, 
-  Text, 
-  Link, 
-  Modal, 
-  ModalOverlay, 
-  ModalContent, 
-  ModalHeader, 
-  ModalCloseButton, 
-  ModalBody, 
-  useDisclosure } from '@chakra-ui/react';
-import AddMaterial from './AddMaterial'; // Assuming AddMaterial is a component you've defined
+  Button,
+  Box } from '@chakra-ui/react';
+import AddMaterial from './AddMaterial';
 import fetchContent from '../../context/fetchContent';
+import MaterialItem from './MaterialItem';
 
 const Materials = () => {
   const [selectedClass, setSelectedClass] = useState(null);
@@ -50,7 +43,7 @@ const Materials = () => {
       <VStack align="flex-start" spacing={8}>
 
         {/* Courses Column */}
-        <Heading as="h2" size="md" p="20px">Courses</Heading>
+        <Heading as="h2" size="lg" >Courses</Heading>
         <HStack align="stretch" spacing={4} minWidth="150px">
           {subjects.map((subject, index) => (
             <Button
@@ -66,15 +59,17 @@ const Materials = () => {
         {/* Types Column */}
         {selectedClass && (
           <VStack align="flex-start" spacing={8}>
-            <Heading as="h2" size="md">Material</Heading>
+            <Heading as="h2" size="lg">Material</Heading>
             <HStack align={'flex-start'}>
-              {['Text', 'Document', 'Link', 'Image'].map((type, typeIndex) => (
-                <VStack key={typeIndex} align="stretch" spacing={2} pr={5}>
-                  <Heading as="h3" size="sm">{type}</Heading>
-                  {studyMaterials.filter(material => material.material_type === type && material.subject_name === selectedClass).map((material, materialIndex) => (
-                    <Button key={materialIndex}>{material.title}</Button>
-                  ))}
-                </VStack>
+              {['Text', 'Document', 'Link'].map((type, typeIndex) => (
+                <Box key={typeIndex} maxHeight="50vh" overflowY="auto" pr={5}>
+                  <VStack align="stretch" spacing={2}>
+                    <Heading as="h3" size="sm">{type}</Heading>
+                    {studyMaterials.filter(material => material.material_type === type && material.subject_name === selectedClass).map((material, materialIndex) => (
+                      <MaterialItem key={materialIndex} material={material} />
+                    ))}
+                  </VStack>
+                </Box>
               ))}
             </HStack>
           </VStack>
