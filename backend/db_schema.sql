@@ -23,8 +23,7 @@ CREATE TABLE IF NOT EXISTS user_sessions (
 CREATE TABLE IF NOT EXISTS subjects (
   subject_id INTEGER PRIMARY KEY, 
   subject_name TEXT NOT NULL, 
-  user_id INTEGER, 
-  FOREIGN KEY (course_id) REFERENCES courses(course_id), 
+  user_id INTEGER,  
   FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
