@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { FormErrorMessage, FormLabel, Center, Box, Heading, Input, Button, HStack } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -91,6 +92,7 @@ const Login = () => {
       {error && <div>{error}</div>}
       </FormErrorMessage>
     </form>
+    <Link to="/register">Create an Account</Link>
   </Box>
 </Center>
 </>

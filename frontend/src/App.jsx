@@ -7,7 +7,7 @@ import { useAuth} from './context/AuthContext.jsx';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar/Navbar.jsx';
-import { ChakraProvider, Flex } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 import Materials from './components/Materials/Materials.jsx'; 
 
 
@@ -23,6 +23,7 @@ const App = () => {
   return (
     <ChakraProvider>
       <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={!authData ? <Login onLoginSuccess={onLoginSuccess}/> : <Navigate to="/dashboard" replace />} />
         <Route path="/register" element={!authData ? <Register /> : <Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={
