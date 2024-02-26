@@ -8,6 +8,7 @@ const sqlite3 = require('sqlite3').verbose();
 const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3001;
+const JWT_SECRET = '4u2h34uh23423j4h23jk4h2k34ery'
 
 app.use(cors());
 app.use(express.json());
@@ -63,7 +64,7 @@ app.post('/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
-    const token = jwt.sign({ userId: user.user_id }, 'your_jwt_secret', { expiresIn: '1d' });
+    const token = jwt.sign({ userId: user.user_id }, JWT_SECRET, { expiresIn: '1d' });
     res.json({ token });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
@@ -74,7 +75,7 @@ app.post('/login', async (req, res) => {
 const authMiddleware = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1];
-    const decoded = jwt.verify(token, 'your_jwt_secret'); 
+    const decoded = jwt.verify(token, JWT_SECRET); 
     req.user = decoded;
     next();
   } catch (error) {

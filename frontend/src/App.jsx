@@ -20,12 +20,17 @@ const App = () => {
     navigate('/dashboard');
   };
 
+  const onRegisterSuccess = (data) => {
+    setAuthData(data);
+    navigate('/dashboard');
+  }
+
   return (
     <ChakraProvider>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={!authData ? <Login onLoginSuccess={onLoginSuccess}/> : <Navigate to="/dashboard" replace />} />
-        <Route path="/register" element={!authData ? <Register /> : <Navigate to="/dashboard" replace />} />
+        <Route path="/register" element={!authData ? <Register onRegisterSuccess={onRegisterSuccess}/> : <Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <div style={{ display: 'flex' }}>

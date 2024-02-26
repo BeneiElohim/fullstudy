@@ -38,8 +38,7 @@ const Login = () => {
         // Store auth data in sessionStorage for the current session only
         sessionStorage.setItem('authData', JSON.stringify(data));
       }
-
-      // Redirect to dashboard or perform other actions on successful login
+      
     } catch (err) {
       setError(err.message);
     }
