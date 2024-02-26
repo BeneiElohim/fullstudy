@@ -4,7 +4,9 @@ import {
   HStack, 
   Heading, 
   Button,
-  Box } from '@chakra-ui/react';
+  Box, 
+  Wrap,
+  WrapItem } from '@chakra-ui/react';
 import AddMaterial from './AddMaterial';
 import fetchContent from '../../context/fetchContent';
 import MaterialItem from './MaterialItem';
@@ -38,36 +40,40 @@ const Materials = () => {
       <Heading as="h1" size="xl">Study Materials <AddMaterial subjects={subjects} onMaterialsUpdated={fetchMaterials} /></Heading>
       <VStack align="flex-start" spacing={8}>
 
-        {/* Courses Column */}
+        {/* Subjects Column */}
         <Heading as="h2" size="lg" >Subjects</Heading>
-        <HStack align="stretch" spacing={4} minWidth="150px">
+        <Wrap align="stretch" spacing={4} minWidth="150px" maxWidth="95%">
           {subjects.map((subject, index) => (
-            <Button
-              key={index}
-              variant={selectedClass === subject.subject_name ? 'solid' : 'outline'}
-              onClick={() => setSelectedClass(subject.subject_name)}
-            >
-              {subject.subject_name}
-            </Button>
+            <WrapItem key={index}>
+              <Button
+                key={index}
+                variant={selectedClass === subject.subject_name ? 'solid' : 'outline'}
+                onClick={() => setSelectedClass(subject.subject_name)}
+              >
+                {subject.subject_name}
+              </Button>
+            </WrapItem>
           ))}
-        </HStack>
+        </Wrap>
 
         {/* Types Column */}
         {(selectedClass) && (
-          <VStack align="flex-start" spacing={8}>
+          <VStack align="flex-start" spacing={8} width="100%">
             <Heading as="h2" size="lg">Material</Heading>
-            <HStack align={'flex-start'}>
+            <Wrap justify="center" spacing={4}>
               {['Text', 'Document', 'Link'].map((type, typeIndex) => (
-                <Box key={typeIndex} maxHeight="50vh" overflowY="auto" pr={5}>
-                  <VStack align="stretch" spacing={2}>
-                    <Heading as="h3" size="sm">{type}</Heading>
-                    {studyMaterials.filter(material => material.material_type === type && material.subject_name === selectedClass).map((material, materialIndex) => (
-                      <MaterialItem key={materialIndex} material={material} />
-                    ))}
-                  </VStack>
-                </Box>
+                <WrapItem key={typeIndex} flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg:'12.5%' }}>
+                  <Box maxHeight="50vh" overflowY="auto" pr={5} minW="160px" flex="1">
+                    <VStack align="stretch" spacing={2}>
+                      <Heading as="h3" size="sm">{type}</Heading>
+                      {studyMaterials.filter(material => material.material_type === type && material.subject_name === selectedClass).map((material, materialIndex) => (
+                        <MaterialItem key={materialIndex} material={material} />
+                      ))}
+                    </VStack>
+                  </Box>
+                </WrapItem>
               ))}
-            </HStack>
+            </Wrap>
           </VStack>
         )}
       </VStack>
