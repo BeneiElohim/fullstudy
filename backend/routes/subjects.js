@@ -25,50 +25,22 @@ router.get('/', authMiddleware , async (req, res) => {
     }
 })
   
-router.post('/new-assignment', authMiddleware, async (req, res) => {
+router.post("/new-subject", authMiddleware, (req, res) => {
+    const subject_name  = req.body.subject_name;
     const userId = req.user.userId;
-    const { title, subject_name, due_date, priority, description } = req.body;
-
-    // Validate input data
-    if (!title || !subject_name || !due_date || !priority) {
-        return res.status(400).json({ msg: "Please provide title, subject name, due date, and priority for the assignment." });
-    }
-
-    // Optional: Validate priority
-    if (!['High', 'Medium', 'Low'].includes(priority)) {
-        return res.status(400).json({ msg: "Priority must be one of 'High', 'Medium', 'Low'." });
-    }
-
-    const findSubjectIdSql = "SELECT subject_id FROM subjects WHERE subject_name = ?";
-
-    global.db.get(findSubjectIdSql, [subject_name], (subjectErr, subjectRow) => {
-        if (subjectErr) {
-            res.status(400).json({ "error": subjectErr.message });
+    const insertSql = "INSERT INTO subjects (subject_name, user_id) VALUES (?, ?)";
+    global.db.run(insertSql, [subject_name, userId], function(err) {
+        if (err) {
+            res.status(400).json({ "error": err.message });
             return;
         }
-  
-        if (!subjectRow) {
-            res.status(404).json({ "error": "Subject not found" });
-            return;
-        }
-
-        const subject_id = subjectRow.subject_id;
-
-        const insertSql = `INSERT INTO assignments (title, subject_id, user_id, due_date, priority, description) VALUES (?, ?, ?, ?, ?, ?)`;
-        db.run(insertSql, [title, subject_id, userId, due_date, priority, description], function(insertErr) {
-            if (insertErr) {
-                res.status(400).json({ "error": insertErr.message });
-                return;
-            }
             res.json({
-                "message": "success",
-                "data": {
-                    "id": this.lastID
+                message: "success",
+                data: {
+                    id: this.lastID
                 }
             });
         });
-    });
 });
-
 
 module.exports = router;
