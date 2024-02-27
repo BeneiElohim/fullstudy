@@ -4,6 +4,7 @@ import AssignmentCard from './Assignments/AssignmentCard';
 import fetchContent from '../context/fetchContent';
 import { Box, Text, HStack , Heading} from '@chakra-ui/react';
 import AddSubject from './Subjects/AddSubject';
+import AddAssignment from './Assignments/AddAssignment';
 
 const Dashboard = () => {
   const [assignments, setAssignments] = useState([]);
@@ -41,7 +42,7 @@ const Dashboard = () => {
           {subjects.map(subject => <SubjectCard key={subject.subject_id} subject={subject} />)}
         </Box>
         <Box>
-          <Text fontSize="xl" mb={4}>Assignments</Text>
+          <Text fontSize="xl" mb={4}>Assignments <AddAssignment subjects={subjects} onAssignmentsUpdate={fetchAssignments}/></Text>
           {assignments.map(assignment => <AssignmentCard key={assignment.assignment_id} assignment={assignment} />)}
         </Box>
 

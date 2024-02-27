@@ -50,7 +50,7 @@ const storage = multer.diskStorage({
   });
   
   
-  router.post("/new-material", authMiddleware, upload.single('file') , (req, res) => {
+router.post("/new-material", authMiddleware, upload.single('file') , (req, res) => {
     const { title, material_type, subject_name, link_url, notes } = req.body;
     const file_path = req.file ? req.file.path : null; 
     const userId = req.user.userId;
@@ -84,7 +84,7 @@ const storage = multer.diskStorage({
             });
         });
     });
-  });
+});
   
   router.put("/update-material/:id", authMiddleware, upload.single('file'), (req, res) => {
     const { title, material_type, subject_name, link_url, notes } = req.body;

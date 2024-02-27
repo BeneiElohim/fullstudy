@@ -18,7 +18,8 @@ import {
   Stack, 
   Radio, 
   HStack, 
-  VStack } from '@chakra-ui/react';
+  VStack,
+  Textarea } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { AddIcon } from '@chakra-ui/icons';
 
@@ -115,7 +116,7 @@ function AddMaterial({ subjects, ...props }) {
           <ModalCloseButton />
           <ModalBody as="form" onSubmit={handleSubmit}>
             <FormControl isInvalid={errors.subject}>
-              <FormLabel>Course:</FormLabel>
+              <FormLabel>Subject:</FormLabel>
               <Select placeholder='Select option' value={subject} onChange={e => setSubject(e.target.value)}>
                 {subjects.map((subject, index) => (
                   <option key={index} value={subject.subject_name}>{subject.subject_name}</option>
@@ -135,7 +136,7 @@ function AddMaterial({ subjects, ...props }) {
             <Text py={10}>Select One:</Text>
             <HStack>
             <RadioGroup onChange={setSelectedOption} value={selectedOption} mt={4}>
-              <Stack direction="column" spacing={10}>
+              <Stack direction="column" spacing="60px">
                 <Radio value="link">URL</Radio>
                 <Radio value="notes">Notes</Radio>
                 <Radio value="file">Upload</Radio>
@@ -150,7 +151,7 @@ function AddMaterial({ subjects, ...props }) {
 
               <FormControl mt={4} isDisabled={selectedOption !== 'notes'}>
 
-                <Input placeholder='Add notes here...' value={notes} onChange={e => setNotes(e.target.value)} />
+                <Textarea placeholder='Add notes here...' value={notes} onChange={e => setNotes(e.target.value)} />
               </FormControl>
 
               <FormControl mt={4} isDisabled={selectedOption !== 'file'}>
