@@ -7,7 +7,7 @@ import { useAuth} from './context/AuthContext.jsx';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar/Navbar.jsx';
-import { ChakraProvider } from '@chakra-ui/react';
+import { Box , useBreakpointValue } from '@chakra-ui/react';
 import Materials from './components/Materials/Materials.jsx'; 
 
 
@@ -24,35 +24,35 @@ const App = () => {
     setAuthData(data);
     navigate('/dashboard');
   }
+  
+  const marginLeft = useBreakpointValue({ base: '50px', md: '200px' }); 
 
   return (
-    <ChakraProvider>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={!authData ? <Login onLoginSuccess={onLoginSuccess}/> : <Navigate to="/dashboard" replace />} />
         <Route path="/register" element={!authData ? <Register onRegisterSuccess={onRegisterSuccess}/> : <Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={
           <ProtectedRoute>
-            <div style={{ display: 'flex' }}>
+            <Box display="flex">
               <Navbar />
-              <div style={{ marginLeft: '200px' }}>
+              <Box marginLeft={marginLeft}>
                 <Dashboard />
-              </div>
-            </div>
+              </Box>
+            </Box>
           </ProtectedRoute>
         } />
         <Route path="/materials" element={
           <ProtectedRoute>
-            <div style={{ display: 'flex' }}>
+            <Box display="flex">
               <Navbar />
-              <div style={{ marginLeft: '200px' }}>
+              <Box marginLeft={marginLeft}>
                 <Materials />
-              </div>
-            </div>
+              </Box>
+            </Box>
           </ProtectedRoute>
         } />
       </Routes>
-    </ChakraProvider>
   );
 };
 

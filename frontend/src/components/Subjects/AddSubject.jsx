@@ -18,7 +18,7 @@ import {
   import React, { useState } from 'react';
   import { AddIcon } from '@chakra-ui/icons';
   
-  function AddSubject() {
+  function AddSubject(props) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [subject, setSubject] = useState('');
     const [errors, setErrors] = useState({});
@@ -53,6 +53,7 @@ import {
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }
+        props.onSubjectsUpdate()
         onClose(); // Close the modal on success
       } catch (error) {
         console.error('Error:', error);

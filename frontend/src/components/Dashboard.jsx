@@ -16,8 +16,12 @@ const Dashboard = () => {
     fetchContent('subjects', setSubjects, subjectsUrl, setIsLoading);
   };
 
+  const fetchAssignments = () => {
+    fetchContent('assignments', setAssignments, assignementsUrl, setIsLoading);
+  }
+
   useEffect(() => {
-    fetchContent('assignments', setAssignments, assignementsUrl, setIsLoading );
+    fetchAssignments();
     fetchSubjects();
   }, []);
 
@@ -33,7 +37,7 @@ const Dashboard = () => {
       <Text align="center" fontSize="xl" mb={4}>Today's Date: {today.toLocaleDateString()}</Text>
       <HStack gap={10} align="flex-start">
         <Box>
-          <Text fontSize="xl" mb={4}>Subjects <AddSubject/></Text>
+          <Text fontSize="xl" mb={4}>Subjects <AddSubject onSubjectsUpdate={fetchSubjects}/></Text>
           {subjects.map(subject => <SubjectCard key={subject.subject_id} subject={subject} />)}
         </Box>
         <Box>

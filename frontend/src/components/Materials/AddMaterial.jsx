@@ -25,7 +25,6 @@ import { AddIcon } from '@chakra-ui/icons';
 function AddMaterial({ subjects, ...props }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [subject, setSubject] = useState('');
-  const [material_type, setMaterial_Type] = useState('');
   const [title, setTitle] = useState('');
   const [link_url, setLink_Url] = useState('');
   const [notes, setNotes] = useState('');

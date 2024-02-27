@@ -44,10 +44,10 @@ const Navbar = () => {
           <DrawerCloseButton />
           <VStack spacing={4} m={4}>
             <Text fontSize="2xl">StudyTracker</Text>
-            <Link to="/dashboard"><Button variant="ghost" w="full" justifyContent="flex-start" onClick={onClose}><MdDashboard size={24} />Dashboard</Button></Link>
-            <Link to="/materials"><Button variant="ghost" w="full" justifyContent="flex-start" onClick={onClose}><ImBooks size={24} />Materials</Button></Link>
-            <Button variant="ghost" w="full" justifyContent="flex-start" onClick={onClose}><IoSettingsSharp size={24} />Settings</Button>
-            <Button onClick={() => { logout(); onClose(); }} variant="ghost" w="full" justifyContent="flex-start"><TbLogout2 size={24} />Logout</Button>
+            <Link to="/dashboard"><Button variant="ghost"  justifyContent="flex-start" pr="95px" pl="95px" onClick={onClose}><MdDashboard size={24} />Dashboard</Button></Link>
+            <Link to="/materials"><Button variant="ghost" justifyContent="flex-start" pr="100px" pl="100px" onClick={onClose}><ImBooks size={24} />Materials</Button></Link>
+            <Button variant="ghost" w="full" justifyContent="center" onClick={onClose}><IoSettingsSharp size={24} />Settings</Button>
+            <Button onClick={() => { logout(); onClose(); }} variant="ghost" w="full" justifyContent="center"><TbLogout2 size={24} />Logout</Button>
           </VStack>
         </DrawerContent>
       </Drawer>
