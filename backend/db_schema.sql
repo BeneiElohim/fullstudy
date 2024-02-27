@@ -8,8 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
   full_name TEXT NOT NULL, 
   email TEXT NOT NULL UNIQUE, 
   password_hash TEXT NOT NULL, 
-  registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-  is_verified BOOLEAN NOT NULL DEFAULT 0
+  registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS user_sessions (
