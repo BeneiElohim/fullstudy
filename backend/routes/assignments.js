@@ -8,7 +8,7 @@ router.get('/', authMiddleware , async (req, res) => {
       const userId = req.user.userId;
       const getAssignments = (userId) => {
         return new Promise((resolve, reject) => {
-          const sql = 'SELECT * FROM assignments WHERE user_id = ?';
+          const sql = 'SELECT assignments.*, subjects.subject_name FROM assignments JOIN subjects ON assignments.subject_id = subjects.subject_id WHERE assignments.user_id = ?';
           db.all(sql, [userId], (err, rows) => { 
             if (err) {
               reject(err);
