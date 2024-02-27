@@ -49,6 +49,7 @@ const Materials = () => {
                 key={index}
                 variant={selectedClass === subject.subject_name ? 'solid' : 'outline'}
                 onClick={() => setSelectedClass(subject.subject_name)}
+                colorScheme='blue'
               >
                 {subject.subject_name}
               </Button>
