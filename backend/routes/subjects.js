@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
 const multer = require('multer');
-const upload = multer();
 
 
 router.get('/', authMiddleware , async (req, res) => {
@@ -27,7 +26,7 @@ router.get('/', authMiddleware , async (req, res) => {
     }
 })
   
-router.post("/new-subject", authMiddleware, upload.none(), (req, res) => {
+router.post("/new-subject", authMiddleware, (req, res) => {
     const subject_name  = req.body.subject_name;
     const userId = req.user.userId;
   

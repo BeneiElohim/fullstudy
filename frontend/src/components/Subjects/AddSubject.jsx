@@ -37,8 +37,9 @@ import {
       e.preventDefault();
       if (!validateForm()) return;
     
-      const formData = new FormData();
-      formData.append('subject_name', subject);
+      const subjectData = {
+        subject_name: subject
+      };
     
       const authData = JSON.parse(sessionStorage.getItem('authData'));
       const token = authData ? authData.token : null;
@@ -46,8 +47,8 @@ import {
       try {
         const response = await fetch('http://localhost:3001/subjects/new-subject', {
           method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}` },
-          body: formData,
+          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'},
+          body: JSON.stringify(subjectData),
         });
     
         if (!response.ok) {
