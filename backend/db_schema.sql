@@ -33,9 +33,35 @@ CREATE TABLE IF NOT EXISTS assignments (
   user_id INTEGER, 
   due_date DATE NOT NULL, 
   priority TEXT NOT NULL CHECK (priority IN ('High', 'Medium', 'Low')), 
-  description TEXT, 
+  description TEXT,
+  completed BOOLEAN NOT NULL DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+  FOREIGN KEY (subject_id) REFERENCES subjects(subject_id), 
+  FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE IF NOT EXISTS assignment_subtasks (
+  subtask_id INTEGER PRIMARY KEY, 
+  assignment_id INTEGER, 
+  title TEXT NOT NULL, 
+  description TEXT, 
+  due_date DATE NOT NULL, 
+  completed BOOLEAN NOT NULL DEFAULT 0, 
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+  FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id)
+);
+
+CREATE TABLE IF NOT EXISTS exams (
+  exam_id INTEGER PRIMARY KEY, 
+  title TEXT NOT NULL, 
+  subject_id INTEGER, 
+  user_id INTEGER, 
+  exam_date DATE NOT NULL,
+  exam_length_minutes FLOAT NOT NULL,
+  description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
   FOREIGN KEY (subject_id) REFERENCES subjects(subject_id), 
   FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
@@ -100,22 +126,6 @@ CREATE TABLE IF NOT EXISTS study_materials (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(user_id),
   FOREIGN KEY (subject_id) REFERENCES subjects(subject_id)
-);
-
-CREATE TABLE IF NOT EXISTS material_tags (
-  tag_id INTEGER PRIMARY KEY,
-  material_id INTEGER NOT NULL,
-  tag_name TEXT NOT NULL,
-  FOREIGN KEY (material_id) REFERENCES study_materials(material_id)
-);
-
-CREATE TABLE IF NOT EXISTS material_versions (
-  version_id INTEGER PRIMARY KEY,
-  material_id INTEGER NOT NULL,
-  version_number INTEGER NOT NULL,
-  file_path TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (material_id) REFERENCES study_materials(material_id)
 );
 
 CREATE TABLE IF NOT EXISTS task_timers (

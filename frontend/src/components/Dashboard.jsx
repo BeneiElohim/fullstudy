@@ -5,6 +5,11 @@ import fetchContent from '../context/fetchContent';
 import { Box, Text, HStack , Heading} from '@chakra-ui/react';
 import AddSubject from './Subjects/AddSubject';
 import AddAssignment from './Assignments/AddAssignment';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+
 
 const Dashboard = () => {
   const [assignments, setAssignments] = useState([]);
@@ -32,10 +37,25 @@ const Dashboard = () => {
     return <div>Loading...</div>;
   }
 
+  const localizer = momentLocalizer(moment);
+  const myEventsList = assignments.map(assignment => ({
+    title: assignment.title,
+    start: new Date(assignment.due_date),
+    end: new Date(assignment.due_date),
+    allDay: false,
+    resource: assignment,
+  }));
+
   return (
     <Box padding={4} >
       <Heading as="h1" size="xl" pb={10}>My Dashboard</Heading>
-      <Text align="center" fontSize="xl" mb={4}>Today's Date: {today.toLocaleDateString()}</Text>
+      <Calendar
+        localizer={localizer}
+        events={myEventsList}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: 500}}
+      />
       <HStack gap={10} align="flex-start">
         <Box>
           <Text fontSize="xl" mb={4}>Subjects <AddSubject onSubjectsUpdate={fetchSubjects}/></Text>
