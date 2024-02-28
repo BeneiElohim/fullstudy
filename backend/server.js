@@ -88,6 +88,10 @@ const materialsRoutes = require('./routes/materials')
 app.use('/materials', materialsRoutes)
 
 
+////////EXAMS//////////////////////
+const examsRoutes = require('./routes/exams')
+app.use('/exams', examsRoutes)
+
 
 
 
