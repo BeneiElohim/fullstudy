@@ -10,6 +10,7 @@ import {
 import AddMaterial from './AddMaterial';
 import fetchContent from '../../context/fetchContent';
 import MaterialItem from './MaterialItem';
+import DeleteMaterial from './DeleteMaterial';
 
 const Materials = () => {
   const [selectedClass, setSelectedClass] = useState(null);
@@ -68,7 +69,10 @@ const Materials = () => {
                     <VStack align="stretch" spacing={2}>
                       <Heading as="h3" size="sm">{type}</Heading>
                       {studyMaterials.filter(material => material.material_type === type && material.subject_name === selectedClass).map((material, materialIndex) => (
-                        <MaterialItem key={materialIndex} material={material} />
+                        <HStack key={materialIndex}> {/* Use React.Fragment to wrap multiple elements */}
+                          <MaterialItem material={material} />
+                          <DeleteMaterial materialId={material.material_id} onMaterialsUpdated={fetchMaterials} />
+                        </HStack>
                       ))}
                     </VStack>
                   </Box>
