@@ -17,6 +17,7 @@ import {
 import AddMaterial from './AddMaterial';
 import fetchContent from '../../context/fetchContent';
 import MaterialItem from './MaterialItem';
+import DeleteMaterial from './DeleteMaterial';
 
 const Materials = () => {
   const [selectedClass, setSelectedClass] = useState(null);
@@ -92,16 +93,24 @@ const handleDeleteMaterial = () => {
         {/* Materials Column */}
         {selectedClass && (
           <VStack align="flex-start" spacing={8} width="100%">
-            {studyMaterials.filter(material => material.subject_name === selectedClass).map((material) => (
-              <MaterialItem
-                key={material.id}
-                material={material}
-                onDelete={() => {
-                  setSelectedMaterial(material);
-                  onOpen();
-                }}
-              />
-            ))}
+            <Heading as="h2" size="lg">Material</Heading>
+            <Wrap justify="center" spacing={4}>
+              {['Text', 'Document', 'Link'].map((type, typeIndex) => (
+                <WrapItem key={typeIndex} flexBasis={{ base: '100%', sm: '50%', md: '33.33%', lg:'12.5%' }}>
+                  <Box maxHeight="50vh" overflowY="auto" pr={5} minW="160px" flex="1">
+                    <VStack align="stretch" spacing={2}>
+                      <Heading as="h3" size="sm">{type}</Heading>
+                      {studyMaterials.filter(material => material.material_type === type && material.subject_name === selectedClass).map((material, materialIndex) => (
+                        <HStack key={materialIndex}> {/* Use React.Fragment to wrap multiple elements */}
+                          <MaterialItem material={material} />
+                          <DeleteMaterial materialId={material.material_id} onMaterialsUpdated={fetchMaterials} />
+                        </HStack>
+                      ))}
+                    </VStack>
+                  </Box>
+                </WrapItem>
+              ))}
+            </Wrap>
           </VStack>
         )}
       </VStack>
