@@ -38,15 +38,19 @@ const Materials = () => {
     fetchMaterials();
   }, []);
 
-  const handleDeleteMaterial = () => {
-    if (selectedMaterial) {
-      fetch(`/materials/delete-material/${selectedMaterial.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      })
+ 
+const handleDeleteMaterial = () => {
+  if (selectedMaterial) {
+    const authData = JSON.parse(sessionStorage.getItem('authData'));
+    const token = authData.token;
+
+    fetch(`http://localhost:3001/materials/delete-material/${selectedMaterial.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
       .then(res => res.json())
       .then(data => {
         if (data.message === 'deleted') {
@@ -57,9 +61,9 @@ const Materials = () => {
         }
       })
       .catch(err => console.error('Error:', err));
-    }
-    onClose();
-  };
+  }
+  onClose();
+};
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -132,3 +136,5 @@ const Materials = () => {
 };
 
 export default Materials;
+
+
